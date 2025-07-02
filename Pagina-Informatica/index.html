@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi Página de Informática</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="snow" id="snow"></div>
+  <div class="anim-container">
+    <div class="button-row">
+      <button onclick="showVideo(1)">Video 1</button>
+      <button onclick="showVideo(2)">Video 2</button>
+      <button onclick="showVideo(3)">Video 3</button>
+      <button onclick="showVideo(4)">Video 4</button>
+    </div>
+    <div class="main-box">
+      <div class="content-area" id="content-area">
+        <p>Haz clic en un botón para ver el video.</p>
+      </div>
+    </div>
+  </div>
+  <section class="grupos-section">
+    <div class="grupo">
+      <img src="img/grupo1.png" alt="Grupo Primero">
+      <ul>
+        <li><strong>School Tour</strong></li>
+        <li>C. Hernández</li>
+        <li>P. Raffo</li>
+        <li>O. Causero</li>
+        <li>P. Magarelli</li>
+        <li>S. Magarelli</li>
+      </ul>
+    </div>
+    <div class="grupo">
+      <img src="img/grupo2.png" alt="Grupo Segundo">
+      <ul>
+        <li><strong>Un día con el cefe</strong></li>
+        <li>Balbo</li>
+        <li>Varela</li>
+        <li>Sapio</li>
+        <li>Cirelli</li>
+        <li>Fariña</li>
+        <li>Calio</li>
+      </ul>
+    </div>
+    <div class="grupo">
+      <img src="img/grupo3.png" alt="Grupo Tercero">
+      <ul>
+        <li><strong>Grupo: "un día normal con cuarto año"</strong></li>
+        <li>Pared</li>
+        <li>Arancibia</li>
+        <li>De luca</li>
+        <li>Luna</li>
+        <li>Muñoz</li>
+      </ul>
+    </div>
+    <div class="grupo">
+      <img src="img/grupo4.png" alt="Grupo Cuarto">
+      <ul>
+        <li><strong>Cuarto</strong></li>
+        <li>Azul Carcione</li>
+        <li>Ema Cettefrati</li>
+        <li><span class="rojo">Ian Lopez (Owner)</span></li>
+        <li>Helen Gonzalez</li>
+      </ul>
+    </div>
+  </section>
+  <footer class="footer">
+    Copyrights © Instituto Ceferino Namuncurá - By Ian Lopez 2025
+  </footer>
+  <script>
+    // Nieve animada
+    const snowContainer = document.getElementById('snow');
+    function randomBetween(a, b) { return a + Math.random() * (b - a); }
+    function createSnowflake() {
+      const snowflake = document.createElement('span');
+      snowflake.className = 'snowflake';
+      snowflake.innerHTML = Math.random() > 0.5 ? '❄️' : '✦';
+      snowflake.style.left = randomBetween(0, 98) + 'vw';
+      snowflake.style.fontSize = randomBetween(1, 2.2) + 'em';
+      snowflake.style.animationDuration = randomBetween(4, 10) + 's';
+      snowflake.style.opacity = randomBetween(0.5, 1);
+      snowContainer.appendChild(snowflake);
+      setTimeout(() => snowflake.remove(), 11000);
+    }
+    setInterval(createSnowflake, 250);
+
+    // Mostrar video en el cuadro central
+    function showVideo(num) {
+      const content = document.getElementById('content-area');
+      content.innerHTML = `
+        <video width="640" height="360" controls>
+          <source src="videos/mi-video${num}.mp4" type="video/mp4">
+          Tu navegador no soporta el video.
+        </video>
+      `;
+    }
+
+    // Animación al hacer scroll para los grupos
+    const grupos = document.querySelectorAll('.grupo');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // Solo animar una vez
+        }
+      });
+    }, { threshold: 0.2 });
+
+    grupos.forEach(grupo => observer.observe(grupo));
+  </script>
+</body>
+</html>
