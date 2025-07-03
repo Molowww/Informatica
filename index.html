@@ -165,13 +165,13 @@
       renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
       renderer.setClearColor(0x000000, 0);
 
-      // Cubo base negro - TAMAÑO AUMENTADO
+      // Cubo base negro
       const baseGeometry = new THREE.BoxGeometry(3.6, 3.6, 3.6);
       const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.7, roughness: 0.3 });
       cube = new THREE.Mesh(baseGeometry, baseMaterial);
       scene.add(cube);
 
-      // Paneles "flotantes" en cada cara - TAMAÑOS AUMENTADOS
+      // Paneles "flotantes" en cada cara
       const panelMaterial = new THREE.MeshStandardMaterial({
         color: 0x191929,
         metalness: 0.6,
@@ -213,8 +213,6 @@
       panel.rotation.x = Math.PI / 2;
       panels.push(panel);
       panels.forEach(p => scene.add(p));
-
-      // BORDES MORADOS ELIMINADOS - Se ha removido completamente esta sección
 
       const light = new THREE.DirectionalLight(0xffffff, 1);
       light.position.set(2, 2, 5);
