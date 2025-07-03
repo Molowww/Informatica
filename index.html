@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi Página de Informática</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="snow" id="snow"></div>
+  <div class="anim-container">
+    <div class="button-row">
+      <button onclick="showVideo(1)">Video 1</button>
+      <button onclick="showVideo(2)">Video 2</button>
+      <button onclick="showVideo(3)">Video 3</button>
+      <button onclick="showVideo(4)">Video 4</button>
+    </div>
+    <div class="main-box">
+      <div class="content-area" id="content-area">
+        <p>Haz clic en un botón para ver el video.</p>
+      </div>
+    </div>
+  </div>
+  <section class="grupos-section">
+    <div class="grupo">
+      <img src="img/grupo1.png" alt="Grupo Primero" style="width:320px; height:180px; border-radius:18px; box-shadow:0 0 16px #00bfff55; object-fit:cover; background:#e6f7ff;">
+      <ul>
+        <li><strong>School Tour</strong></li>
+        <li>C. Hernández</li>
+        <li>P. Raffo</li>
+        <li>O. Causero</li>
+        <li>P. Magarelli</li>
+        <li>S. Magarelli</li>
+      </ul>
+    </div>
+    <div class="grupo">
+      <img src="img/grupo2.png" alt="Grupo Segundo" style="width:320px; height:180px; border-radius:18px; box-shadow:0 0 16px #00bfff55; object-fit:cover; background:#e6f7ff;">
+      <ul>
+        <li><strong>Un día con el cefe</strong></li>
+        <li>Balbo</li>
+        <li>Varela</li>
+        <li>Sapio</li>
+        <li>Cirelli</li>
+        <li>Fariña</li>
+        <li>Calio</li>
+      </ul>
+    </div>
+    <div class="grupo">
+      <img src="img/grupo3.png" alt="Grupo Tercero" style="width:320px; height:180px; border-radius:18px; box-shadow:0 0 16px #00bfff55; object-fit:cover; background:#e6f7ff;">
+      <ul>
+        <li><strong>Grupo: "un día normal con cuarto año"</strong></li>
+        <li>Pared</li>
+        <li>Arancibia</li>
+        <li>De luca</li>
+        <li>Luna</li>
+        <li>Muñoz</li>
+      </ul>
+    </div>
+    <div class="grupo">
+      <img src="img/grupo4.png" alt="Grupo Cuarto" style="width:320px; height:180px; border-radius:18px; box-shadow:0 0 16px #00bfff55; object-fit:cover; background:#e6f7ff;">
+      <ul>
+        <li><strong>El misterio en el ceferino</strong></li>
+        <li>Azul Carcione</li>
+        <li>Ema Cettefrati</li>
+        <li><span class="rojo">Ian Lopez (Owner)</span></li>
+        <li>Helen Gonzalez</li>
+      </ul>
+    </div>
+  </section>
+  <div class="cube-container">
+    <canvas id="cube-canvas" width="800" height="600" style="display:block;margin:40px 0 0 0;background:linear-gradient(135deg, rgba(40,0,60,0.7) 0%, rgba(0,0,0,0.85) 100%);border-radius:28px;box-shadow:0 0 48px #a020f055, 0 0 0 8px #a020f033;"></canvas>
+    <div class="cube-side-text" style="margin-left:48px;align-self:center;max-width:400px;">
+      <h2 style="color:#007acc;margin-top:0;">Ejemplo</h2>
+      <ul style="font-size:1.2em;line-height:1.6;">
+        <li>(Demas cosas)</li>
+        <li>Puedes poner aquí cualquier texto adicional.</li>
+        <li>Personaliza este espacio como quieras.</li>
+      </ul>
+    </div>
+  </div>
+  <footer class="footer">
+    Copyrights © Instituto Ceferino Namuncurá - By Ian Lopez 2025
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+  <script>
+    // Nieve animada
+    const snowContainer = document.getElementById('snow');
+    function randomBetween(a, b) { return a + Math.random() * (b - a); }
+    function createSnowflake() {
+      const snowflake = document.createElement('span');
+      snowflake.className = 'snowflake';
+      snowflake.innerHTML = Math.random() > 0.5 ? '❄️' : '✦';
+      snowflake.style.left = randomBetween(0, 98) + 'vw';
+      snowflake.style.fontSize = randomBetween(1, 2.2) + 'em';
+      snowflake.style.animationDuration = randomBetween(4, 10) + 's';
+      snowflake.style.opacity = randomBetween(0.5, 1);
+      snowContainer.appendChild(snowflake);
+      setTimeout(() => snowflake.remove(), 11000);
+    }
+    setInterval(createSnowflake, 250);
+
+    // Mostrar video en el cuadro central
+    function showVideo(num) {
+      const content = document.getElementById('content-area');
+      // Asocia cada botón a un archivo mp4 diferente
+      let videoSrc = '';
+      switch(num) {
+        case 1:
+          videoSrc = 'Videos/BROTA NA BASE - HIMXN (1080p, h264).mp4';
+          break;
+        case 2:
+          videoSrc = 'videos/mi-video2.mp4';
+          break;
+        case 3:
+          videoSrc = 'videos/mi-video3.mp4';
+          break;
+        case 4:
+          videoSrc = 'videos/b.mp4';
+          break;
+        default:
+          videoSrc = '';
+      }
+      if(videoSrc) {
+        content.innerHTML = `
+          <video width="700" height="390" controls>
+            <source src="${videoSrc}" type="video/mp4">
+            Tu navegador no soporta el video.
+          </video>
+        `;
+      } else {
+        content.innerHTML = '<p>No hay video disponible.</p>';
+      }
+    }
+
+    // Animación al hacer scroll para los grupos
+    const grupos = document.querySelectorAll('.grupo');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // Solo animar una vez
+        }
+      });
+    }, { threshold: 0.2 });
+
+    grupos.forEach(grupo => observer.observe(grupo));
+
+    // --- Cubo 3D interactivo ---
+    let scene, camera, renderer, cube, animId;
+    let isUserInteracting = false;
+    let lastX, lastY;
+    let autoRotateSpeed = 0.005;
+    let autoRotateTimeout;
+    let velocityX = 0;
+    let velocityY = 0;
+    let lastMoveTime = 0;
+    let lastMoveX = 0;
+    let lastMoveY = 0;
+    const FRICTION = 0.96; // Cuanto más bajo, más rápido se frena
+
+    function initCube3D() {
+      const canvas = document.getElementById('cube-canvas');
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(60, 800/600, 0.1, 1000);
+      camera.position.z = 7;
+      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setClearColor(0x000000, 0);
+
+      // Cubo base negro - TAMAÑO AUMENTADO
+      const baseGeometry = new THREE.BoxGeometry(3.6, 3.6, 3.6);
+      const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.7, roughness: 0.3 });
+      cube = new THREE.Mesh(baseGeometry, baseMaterial);
+      scene.add(cube);
+
+      // Paneles "flotantes" en cada cara - TAMAÑOS AUMENTADOS
+      const panelMaterial = new THREE.MeshStandardMaterial({
+        color: 0x191929,
+        metalness: 0.6,
+        roughness: 0.18,
+        transparent: true,
+        opacity: 0.98,
+        side: THREE.DoubleSide
+      });
+      const panelSize = 3.8;
+      const panelOffset = 1.84;
+      const panels = [];
+      // Cara +Z
+      let panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      panel.position.z = panelOffset;
+      panels.push(panel);
+      // Cara -Z
+      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      panel.position.z = -panelOffset;
+      panel.rotation.y = Math.PI;
+      panels.push(panel);
+      // Cara +X
+      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      panel.position.x = panelOffset;
+      panel.rotation.y = Math.PI / 2;
+      panels.push(panel);
+      // Cara -X
+      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      panel.position.x = -panelOffset;
+      panel.rotation.y = -Math.PI / 2;
+      panels.push(panel);
+      // Cara +Y
+      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      panel.position.y = panelOffset;
+      panel.rotation.x = -Math.PI / 2;
+      panels.push(panel);
+      // Cara -Y
+      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      panel.position.y = -panelOffset;
+      panel.rotation.x = Math.PI / 2;
+      panels.push(panel);
+      panels.forEach(p => scene.add(p));
+
+      // BORDES MORADOS ELIMINADOS - Se ha removido completamente esta sección
+
+      const light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(2, 2, 5);
+      scene.add(light);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+      // Mouse controls
+      canvas.addEventListener('mousedown', onPointerDown);
+      canvas.addEventListener('mousemove', onPointerMove);
+      canvas.addEventListener('mouseup', onPointerUp);
+      canvas.addEventListener('mouseleave', onPointerUp);
+      canvas.addEventListener('touchstart', onPointerDown);
+      canvas.addEventListener('touchmove', onPointerMove);
+      canvas.addEventListener('touchend', onPointerUp);
+
+      animateCube();
+    }
+
+    function onPointerDown(e) {
+      isUserInteracting = true;
+      clearTimeout(autoRotateTimeout);
+      if (e.touches) {
+        lastX = e.touches[0].clientX;
+        lastY = e.touches[0].clientY;
+      } else {
+        lastX = e.clientX;
+        lastY = e.clientY;
+      }
+      lastMoveX = lastX;
+      lastMoveY = lastY;
+      lastMoveTime = Date.now();
+      velocityX = 0;
+      velocityY = 0;
+    }
+
+    function onPointerMove(e) {
+      if (!isUserInteracting) return;
+      let clientX, clientY;
+      if (e.touches) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+      const now = Date.now();
+      const dx = (clientX - lastX) * 0.01;
+      const dy = (clientY - lastY) * 0.01;
+      cube.rotation.y += dx;
+      // Solo permitir rotación horizontal (eje Y)
+      // Calcula velocidad en base al último movimiento
+      const dt = now - lastMoveTime;
+      if (dt > 0) {
+        velocityX = (clientX - lastMoveX) / dt * 0.2; // Ajusta el factor para sensibilidad
+        velocityY = (clientY - lastMoveY) / dt * 0.2;
+        lastMoveX = clientX;
+        lastMoveY = clientY;
+        lastMoveTime = now;
+      }
+      lastX = clientX;
+      lastY = clientY;
+    }
+
+    function onPointerUp() {
+      isUserInteracting = false;
+      // Cuando suelta, el cubo sigue girando con la velocidad calculada
+      // No se hace nada aquí, la animación lo maneja
+    }
+
+    function animateCube() {
+      animId = requestAnimationFrame(animateCube);
+      if (isUserInteracting) {
+        // El usuario está moviendo el cubo, no aplicamos auto-rotación ni inercia
+      } else {
+        // Siempre hay movimiento: suma la inercia y el giro automático
+        cube.rotation.y += autoRotateSpeed + velocityX;
+        // No rotar en X automáticamente ni por inercia
+        velocityX *= FRICTION;
+      }
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('DOMContentLoaded', initCube3D);
+  </script>
+</body>
+</html>
