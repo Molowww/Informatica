@@ -165,59 +165,143 @@
       renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
       renderer.setClearColor(0x000000, 0);
 
-      // Cubo base negro
+      // Cubo base negro con más reflejo
       const baseGeometry = new THREE.BoxGeometry(3.6, 3.6, 3.6);
-      const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.7, roughness: 0.3 });
+      const baseMaterial = new THREE.MeshStandardMaterial({ 
+        color: 0x111111, 
+        metalness: 0.9, 
+        roughness: 0.1,
+        envMapIntensity: 1.5
+      });
       cube = new THREE.Mesh(baseGeometry, baseMaterial);
       scene.add(cube);
 
-      // Paneles "flotantes" en cada cara
-      const panelMaterial = new THREE.MeshStandardMaterial({
-        color: 0x191929,
-        metalness: 0.6,
-        roughness: 0.18,
-        transparent: true,
-        opacity: 0.98,
-        side: THREE.DoubleSide
-      });
+      // Loader para texturas
+      const textureLoader = new THREE.TextureLoader();
+      
+      // Paneles para imágenes en las 4 caras principales
       const panelSize = 3.8;
       const panelOffset = 1.84;
       const panels = [];
-      // Cara +Z
-      let panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      
+      // Array de rutas de imágenes (puedes cambiar estas rutas por tus imágenes)
+      const imagePaths = [
+        'img/cubo1.jpg', // Cara frontal (+Z)
+        'img/cubo2.jpg', // Cara trasera (-Z)
+        'img/cubo3.jpg', // Cara derecha (+X)
+        'img/cubo4.jpg'  // Cara izquierda (-X)
+      ];
+      
+      // Cara frontal (+Z) - Imagen 1
+      const texture1 = textureLoader.load(imagePaths[0]);
+      const material1 = new THREE.MeshStandardMaterial({
+        map: texture1,
+        metalness: 0.3,
+        roughness: 0.4,
+        envMapIntensity: 0.8
+      });
+      let panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), material1);
       panel.position.z = panelOffset;
       panels.push(panel);
-      // Cara -Z
-      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      
+      // Cara trasera (-Z) - Imagen 2
+      const texture2 = textureLoader.load(imagePaths[1]);
+      const material2 = new THREE.MeshStandardMaterial({
+        map: texture2,
+        metalness: 0.3,
+        roughness: 0.4,
+        envMapIntensity: 0.8
+      });
+      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), material2);
       panel.position.z = -panelOffset;
       panel.rotation.y = Math.PI;
       panels.push(panel);
-      // Cara +X
-      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      
+      // Cara derecha (+X) - Imagen 3
+      const texture3 = textureLoader.load(imagePaths[2]);
+      const material3 = new THREE.MeshStandardMaterial({
+        map: texture3,
+        metalness: 0.3,
+        roughness: 0.4,
+        envMapIntensity: 0.8
+      });
+      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), material3);
       panel.position.x = panelOffset;
       panel.rotation.y = Math.PI / 2;
       panels.push(panel);
-      // Cara -X
-      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      
+      // Cara izquierda (-X) - Imagen 4
+      const texture4 = textureLoader.load(imagePaths[3]);
+      const material4 = new THREE.MeshStandardMaterial({
+        map: texture4,
+        metalness: 0.3,
+        roughness: 0.4,
+        envMapIntensity: 0.8
+      });
+      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), material4);
       panel.position.x = -panelOffset;
       panel.rotation.y = -Math.PI / 2;
       panels.push(panel);
-      // Cara +Y
-      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      
+      // Caras superior e inferior (sin imágenes, material reflectante)
+      const reflectiveMaterial = new THREE.MeshStandardMaterial({
+        color: 0x191929,
+        metalness: 0.8,
+        roughness: 0.2,
+        transparent: true,
+        opacity: 0.95
+      });
+      
+      // Cara superior (+Y)
+      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), reflectiveMaterial);
       panel.position.y = panelOffset;
       panel.rotation.x = -Math.PI / 2;
       panels.push(panel);
-      // Cara -Y
-      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), panelMaterial);
+      
+      // Cara inferior (-Y)
+      panel = new THREE.Mesh(new THREE.PlaneGeometry(panelSize, panelSize), reflectiveMaterial);
       panel.position.y = -panelOffset;
       panel.rotation.x = Math.PI / 2;
       panels.push(panel);
+      
       panels.forEach(p => scene.add(p));
 
-      const light = new THREE.DirectionalLight(0xffffff, 1);
-      light.position.set(2, 2, 5);
-      scene.add(light);
-      scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+      // Sistema de iluminación mejorado para efectos de reflejo
+      
+      // Luz principal direccional (simula el sol)
+      const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+      mainLight.position.set(5, 8, 5);
+      mainLight.castShadow = true;
+      scene.add(mainLight);
+      
+      // Luz de relleno (suaviza las sombras)
+      const fillLight = new THREE.DirectionalLight(0x87ceeb, 0.4);
+      fillLight.position.set(-3, 2, -5);
+      scene.add(fillLight);
+      
+      // Luz puntual para destacar el cubo
+      const spotLight = new THREE.PointLight(0xa020f0, 0.8, 20);
+      spotLight.position.set(0, 6, 8);
+      scene.add(spotLight);
+      
+      // Luz ambiental reducida para más contraste
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+      scene.add(ambientLight);
+      
+      // Luces adicionales que giran alrededor del cubo para efectos dinámicos
+      window.dynamicLight1 = new THREE.PointLight(0x00ffff, 0.5, 15);
+      window.dynamicLight1.position.set(6, 0, 0);
+      scene.add(window.dynamicLight1);
+      
+      window.dynamicLight2 = new THREE.PointLight(0xff4500, 0.5, 15);
+      window.dynamicLight2.position.set(-6, 0, 0);
+      scene.add(window.dynamicLight2);
+      
+      // Configurar el renderer para mejores efectos de luz
+      renderer.physicallyCorrectLights = true;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.2;
 
       // Mouse controls
       canvas.addEventListener('mousedown', onPointerDown);
@@ -284,6 +368,23 @@
 
     function animateCube() {
       animId = requestAnimationFrame(animateCube);
+      
+      // Animar las luces dinámicas alrededor del cubo para efectos de reflejo
+      const time = Date.now() * 0.001;
+      
+      // Hacer que las luces dinámicas roten alrededor del cubo
+      if (window.dynamicLight1) {
+        window.dynamicLight1.position.x = Math.cos(time * 0.7) * 8;
+        window.dynamicLight1.position.z = Math.sin(time * 0.7) * 8;
+        window.dynamicLight1.position.y = Math.sin(time * 0.3) * 3;
+      }
+      
+      if (window.dynamicLight2) {
+        window.dynamicLight2.position.x = Math.cos(time * 0.5 + Math.PI) * 6;
+        window.dynamicLight2.position.z = Math.sin(time * 0.5 + Math.PI) * 6;
+        window.dynamicLight2.position.y = Math.cos(time * 0.4) * 2;
+      }
+      
       if (isUserInteracting) {
         // El usuario está moviendo el cubo, no aplicamos auto-rotación ni inercia
       } else {

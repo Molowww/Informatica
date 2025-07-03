@@ -1,0 +1,9 @@
+Coloca aquí tus imágenes para el cubo:
+
+- cubo1.jpg (cara frontal)
+- cubo2.jpg (cara trasera)
+- cubo3.jpg (cara derecha)
+- cubo4.jpg (cara izquierda)
+
+Formatos soportados: JPG, PNG
+Resolución recomendada: 512x512 o 1024x1024 píxeles
